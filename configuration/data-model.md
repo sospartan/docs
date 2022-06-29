@@ -1,395 +1,270 @@
 # Data Model
 
-> The data model describes the structure of your database's schema using [Collections](/app/content-collections/)
-> (database tables) and [Fields](/reference/system/fields/) (database columns).
+> The Directus App enables no-code configuration and management for any SQL database, with no arbitrary restrictions on
+> how you build your Data Model. You also have control over how data is displayed, which data is displayed, and how App
+> users interact with it.
+
+<!--
+To make data more user-friendly, the structure of your database data tables, composed of columns and rows
+In Directus, we think of data tables, composed of rows and columns [Collections](/app/content-collections/) (database tables) and [Fields](/reference/system/fields/) (database columns).
+-->
 
 [[toc]]
 
-## Creating a Collection
+:::tip Before You Begin
 
-1. Click <span mi btn>add</span> in the <span mi icon dark>list_alt</span> Data Model header
-2. Enter a unique **Collection Name** to be used as the database table name, API collection key, and App collection name
-   default.
-3. Configure the name and type of the **Primary Key**.
-   - Auto-Incremented Integer
-   - Auto-Incremented Big Integer (MySQL and PostgreSQL only)
-   - Generated UUID
-   - Manually Entered String
-4. Click on <span mi btn>arrow_forward</span>
-5. Optional: Enable and rename any desired **System Fields**.
-   - Status
-   - Sort
-   - Created On
-   - Created By
-   - Updated On
-   - Updated By
-6. Click the <span mi btn>check</span> **Finish Setup** button
+<!-- Learn Directus
+Configuration > Overview -->
 
-::: danger Immutable Keys
-
-As of now, the key can not be modified after the collections has been created.
+It will be helpful if you have a foundational understanding of relational database concepts.
 
 :::
 
-::: tip Database Tables
+:::tip Learn More
 
-Keep in mind that a Directus Collection is just a database table. Therefore you can import or create a table directly in
-the database, and it will automatically appear within Directus. The first time you manage that table, a
-`directus_collections` record will be created with default values.
-
-:::
-
-## Configuring a Collection
-
-You can configure a collection by clicking on it within **Settings > Data Model**. The following options are available:
-
-- **Fields & Layout** — This manages the fields of this collection, and their form layout. For more information on this
-  configuration, refer to the sections below on Field Management.
-  - [Creating a Field](#creating-a-field-standard)
-  - [Configuring a Field](#configuring-a-field)
-  - [Deleting a Field](#deleting-a-field)
-  - [Duplicating a Field](#duplicating-a-field)
-  - [Changing Field Order & Layout](#adjusting-the-collection-form)
-- **Collection Name** — This is the key for the collection. It can not be modified, but you can override it with
-  Translations (see field below).
-- **Note** — A helpful note that explains the collection's purpose
-- **Icon** — The icon used throughout the App when referencing this collection
-- **Color** — A color for the icon, shown in the navigation and its header
-- **Display Template** — A Field Template that creates dynamic titles for the collection's items
-- **Hidden** — Toggles if the collection should be globally hidden. Keep in mind that Admin roles can always see all
-  collections.
-- **Singleton** — For collections that will only contain a single item (eg: an "About Us" form), the
-  [Collection Page](/app/content-collections/) will be bypassed, taking users directly to the
-  [Item Page](/app/content-items/).
-- **Collection Naming Translations** — While the collection key can not be changed (as of now), this option allows
-  translating the collection name into different languages. By default, the platform uses the
-  [Title Formatter](/getting-started/glossary/#title-formatter) to display collection keys as human readable names, but
-  you can also use translations to explicitly rename more technical table keys.
-
-### Archive
-
-The archive feature allows you to enable "soft-delete" within the collection. Archived items are hidden in the App by
-default, but are still returned normally via the API unless they are filtered out.
-
-- **Archive Field** — The field that holds the archive value
-- **Archive App Filter** — Allows users to view archived items
-- **Archive Value** — The value saved in the Archive Field when archived
-- **Unarchive Value** — The value saved in the Archive Field when unarchived
-
-::: tip Automatic Setup
-
-When creating a new Collection, you have the option of creating an optional "Status" field. If you choose to include
-this field, the collection's archive settings will automatically be configured for you.
+You can also configure your Data Model programmatically with the API. To learn more, see our API documentation on
+[Collections](/reference/collections/) and [Fields](reference/fields/).
 
 :::
 
-### Sort
+## Relational Data Models
 
-The sort feature enables manual drag-and-drop item reordering within the Directus App. This is typically shown on the
-[Collection Page](/app/content-collections/), but can also be used for sorting items within
-[Junction Tables](/getting-started/glossary/#junction-collections). Configuration is as easy as selecting the
-appropriate sort field:
+Directus is a wrapper for any SQL database. In order to understand how Directus handles data models, you will need an
+understanding of what a relational data models are. This section provides a conceptual introduction. Data Analysts,
+Database Administrators, and Developers who know about relational data models with SQL may want to skip to
+[Data Models in Directus](#data-models-in-directus).
 
-- **Sort Field** — Choose a field with the `integer` type. You may want to set this field to be "hidden" so it doesn't
-  show up within the Item Page form.
+### Databases
 
-::: tip Automatic Setup
+A database is a set of data stored in a computer. Databases enable you to store your data in a structured way, to make
+it more easily accessible. The way you structure your data is called your data model. SQl databases, which are
+relational databases, store data in data tables.
 
-When creating a new Collection, you have the option of creating an optional "Sort" field. If you choose to include this
-field, the collection's sort settings will automatically be configured for you.
+![A Data Table](image.webp)
 
-:::
+<!-- image should note rows and columns. -->
 
-::: tip Interface Sorting
+### Data Tables
 
-To configure manual sorting within an Interface (eg: M2M, O2M, or M2A), configure as above, but also set the **Sort
-Field** on the field's Relationship pane.
+Data tables are composed of rows and columns. Each data table typically contains one specific type of information like a
+blog post, user profile, IoT event, bank transaction, _or anything_.
 
-:::
+### Rows
 
-### Accountability
+Each row represents one unique _thing_ in your data table. Data tables can also have any number of rows of data, from
+one to one billion, _and beyond!_ In order to sort and find a specific row efficiently, every data table must have a
+Primary Key column. A **Primary Key** is a unique ID for each row. You use it to find the row quickly and efficiently.
 
-By default, the platform tracks all [activity](/reference/system/activity) and [revisions](/reference/system/revisions/)
-for collections. This option allows you to override this, choosing what data is tracked.
+### Columns
 
-- **Activity & Revision Tracking** — supports the follow options:
-  - Track Activity & Revisions
-  - Only Track Activity
-  - Do Not Track Anything
+Tables can also have many columns of data. Every column is labeled with a descriptive name. Here are some examples:
 
-### Duplication
+- **a blog:**`title`, `blog_content`, `date_published`, `author`, etc.
+- **user details:**`username`, `email`, `phone_number`, `age`, etc.
+- **IoT events:**`ip_address`, `temperature`, `time`, etc.
+- **bank transaction:**`time`, `sending_account`, `receiving_account`, and `amount`.
+<!-- Turn this list into a video montage??? -->
 
-The "Save as Copy" option on the Item Page offers a way to effectively duplicate the current item. However, since there
-may be unique or relational data within this form, it's important to control exactly what will be copied. This option
-allows for configuring which parent/relational field values will be copied.
+The columns you choose to add in a data table will completely depend on the information you need to store. There is no
+specific, set-in-stone rule for the kinds of information to include.
 
-## Deleting a Collection
+### Cell Values
 
-1. Navigate to **Settings > Data Model > [Collection Name]**
-2. Click <span mi btn dngr>delete</span> in the header
-3. Confirm this decision by clicking **Delete** in the dialog
+Typically, you will want to store raw data in the database and you will probably want to break information up into the
+smallest pieces possible. This makes the data easier to work with.
 
-::: danger Irreversible Change
+### Data Types
 
-This action is permanent and can not be undone. Please proceed with caution.
+You may have noticed that columns are basically categories, storing one kind of information. This helps keep the data
+consistent, which is important. To help maintain consistency, when you create a column, you must even define its data
+type. For example, an `age` column might be assigned `INTEGER` and a `blog_content` data table might be `TEXT`.
 
-:::
+In computer programming, using the right data type is extremely important. For example, `2` could be treated as an
+`INTEGER` or as a `STRING` _(as in a string of text)_. If you use the `INTEGER` version of `2`, when you try to add
+`2 + 2`, the computer will calculate `4`. If you use the `STRING` version of `2`, when you try to add `2 + 2`, the
+computer will concatenate them into`22`. Therefore, it is important to set the right data type when creating a column.
 
-## Adjusting the Collection Hierarchy
+There are many different data types. Each SQL database flavor _(such as MySQL, SQLite, and Postgres)_ supports slightly
+different data types.
 
-Collections can be organized in several ways, including sorting, custom translations, showing/hiding, and even grouping.
-This organization is reflected in the sidebar navigation, allowing you to control how the users of the app will interact
-with the various collections in your project. Configuring the organization of your collections is done on the
-**Settings > Data Model** page.
+### Data Redundancy
 
-### Sorting & Grouping
+Let's consider the `author` column from the blog table in the example above. Right now, there is one column for the
+author, which stores their name. However, we will likely want to store more information about the authors, such as their
+email address, social media, and so on.
 
-By using the <span mi icon>drag_indicator</span> drag handles on the left of the collection, you can manually put the
-collections in an order that makes the most sense for your project. By dragging a collection underneath another
-collection, you can turn any collection into a group-parent. Groups can even be nested within other groups.
+We _could_ put this author information directly into the blog data table, but let's say in our data model we also treat
+authors as users. So we will want to add information such as their name and social media again separately over in the
+`user_details` data table.
 
-Additionally, you can add special "folder" collections that are exclusively used for organizational purposes, and don't
-hold any data themselves. This can be done by clicking <span mi btn sec>create_new_folder</span> in the top right of the
-page.
+![Redundant Data Model - In the Blog and a User Details Table](image.webp)
 
-### Renaming Collections
+However, there are big problems with this approach:
 
-The key of a collection (eg. what's used in the API / database) can't be changed. However, you can alter how a
-collection is displayed in your app by adding custom translations. This can be done by opening the detail page of a
-collection, and modifying the "Collection Naming Translations" option. Make sure to add translations for all the
-languages your app's users might use for the best results!
+We have no way to link information from user details over to blog posts. If, later in the future, we wanted to change
+the blog posts to include the author's social media, this could be very difficult. If two authors had the same name, it
+would be difficult or impossible to know which one's social media information to use.... You may think, _well what if we
+linked the social media to both the user details and blog tables?_
 
-### Hiding Collections
+If the author decides to change their social media information under `user_details`, that author will have to go through
+and update their social media on every single row containing their blog posts. With just 10 or even 100 blog posts, this
+would be annoying but perhaps not a massive problem.
 
-1. Navigate to **Settings > Data Model**
-2. Click on the <span mi icon>more_vert</span> icon
-3. Select the <span mi icon>visibility_off</span> **Make Collection Hidden** option
+However, as the data increases in volume, redundant data does becomes a serious problem. If you have the same
+information repeated again and again over trillions of bank transactions, storage is wasted and the time it takes to get
+information out of the database drops on a massive scale... _Not to mention the risk of having conflicting or outdated
+banking information across the database!_
 
-Hidden collections can still be accessed by the user by right-clicking on the navigation, and choosing
-<span mi icon>visibility</span> "Show Hidden Collections".
+### Relations
 
-::: tip Permissions
+To avoid data redundancy, it is always best practice to keep your data model D.R.Y. (which stands for Don't Repeat
+Yourself). This is where _relational_ part of relational data models comes into play. You want to make sure that all
+data is unique. It should be input one time, in one location. The best way to do this is to think of tables, and assign
+them column as if they were distinct objects. So continuing the blog and authors example, your blogs table would only
+contain information about the blog posts and the user details table will only contain information about authors. Then
+you relationally link the two data tables, with their Primary Keys.
 
-If you want to prevent a user from accessing a collection altogether, you can configure the read permissions for their
-role to prevent them from viewing the collection. Collections that can't be read by the user won't show up in the
-navigation either.
+![Blogs and Users Relationally Linked](image.webp)
 
-:::
+Instead of just placing the author name into a column on the `blogs` data table _(and creating redundancy)_, we create a
+column to add the Primary Key from `user_details`. Remember, each Primary Key in a data table is unique, which means if
+we can find the primary key for our blog post's author, we can be certain the data _(the author name, social media
+link)_ is all accurate and up to date. Also, whenever you have a column for another data table's Primary Key, it is
+called a _Foreign Key_. This naming convention helps avoid confusion.
 
-## Adjusting the Collection Form
+There are several ways you can relationally link tables:
 
-The [Item Page](/app/content-items/) displays a custom form for viewing and editing each collection's fields. This form
-is highly configurable, with the following field options:
+- **One to One** — One row in a data table links to one other row.
+- **One to Many** — One row in a data table is linked to many rows in another data table.
+- **Many to Many** — Many rows in a data table are linked to many rows in another data table.\
+  Many to many relationships require a special junction data table to manage these relationships.
+- **Many to Any** — Many Rows in a data table link to many rows across any other data tables.\
+  requires a junction data table, like many-to-many relationships, but also requires the a column for the data table name.
 
-- **Visibility** — Fields can be set to "visible" or "hidden" on the form. This is adjusted via the
-  <span mi icon>more_vert</span> field's context menu or edit drawer.
-- **Width** — Fields have three different width options relative to the form/page. This is adjusted via the field's
-  context menu or edit drawer.
-  - <span mi icon>border_vertical</span> Half Width — The field is shown at half the form width
-  - <span mi icon>border_right</span> Full Width — (Default) The field is shown at the full form width
-  - <span mi icon>aspect_ratio</span> Fill Width — The field is shown filling the page width
-- **Sort** — Fields can be rearranged via <span mi icon>drag_indicator</span>.
-- **Grouping** — Fields can be organized within different nested groups that are created using the normal Creating a
-  Field flow. Different style groupings are available for different use-cases.
+### Working With Data
 
-## Creating a Field (Standard)
+<!-- Create video or Vue Component demonstrating each of these components. -->
 
-1. Navigate to **Settings > Data Model > [Collection Name]**
-2. Under Fields & Layout, click the **Create Field** button
-3. **Choose the desired interface** by clicking on the illustration
-4. Add a **Field Key**, which is also used as the default field name
-5. **Configure the field options**, including the default value, required flag, and interface options
+Even for developers with strong data and SQL skills, building out APIs and dashboards to build and manage a data model
+is time consuming. To those who are unfamiliar, the SQL language, classic ORMs, querying/viewing raw data, and
+traditional relational database jargon can be confusing, counterintuitive, and technical. In fact, business users may be
+completely unaccustomed to think about certain things, such as blog posts or geo-positions, in terms of queries and
+relational data tables. It is not practical to teach everyone on the team how to work and think in terms of raw data.
+Business users may find it difficult to think of data without thinking about how it is represented and interacted with:
+colorful, stylized, embedded on a map, etc.
 
-## Creating a Field (Advanced)
+## Data Models in Directus
 
-1. Navigate to **Settings > Data Model > [Collection Name]**
-2. Under Fields & Layout, click the **Create Field in Advanced Mode** button
-3. **Choose the field type**, and follow its setup steps below.
+All relational data model concepts apply in Directus. However, Directus drops much of the traditional relational
+database jargon to make it easier for business users to think about data. The data model is seen as
+_[Collections](#collections) of [Items](#items), composed of [Fields](#fields)_.
 
-::: tip Database Columns
+In order to make data easier to work with, the Directus App lets you customize how data is displayed and interacted
+with. You will be able to provide an intuitive data management experience for even the most non-technical users.
 
-Keep in mind that a Directus Field is just a database columns. Therefore you can create a columns directly in the
-database, and it will automatically appear within Directus using intelligent defaults. You can then enhance the
-experience further using the following steps.
+<video title="Settings > Data Model" autoplay muted loop controls>
+	<source src="" type="video/mp4" />
+</video>
 
-:::
+Data Model configuration takes place across the following pages:
 
-### Schema
+**Settings > Data Model > [Collection] > [Field]**
 
-This pane controls the technical details of the field's database column.
+Across those pages, you have the power to do the follow things, without a line of code or SQL:
 
-- **Key** — (Required) The database column name and field's API key. The key must be unique within its parent
-  Collection. As of now, all keys are sanitized: lowercased, alphanumeric, and with spaces removed. Keys can not be
-  changed once created, however you can use [Field Name Translations](/configuration/data-model/#field) to override how
-  it's displayed in the App.
-- **Type** — (Required) How the data is saved to the database; See
-  [Directus Data Type Superset](/getting-started/glossary/#data-type-superset). This dropdown may be limited or even
-  disabled based on your chosen Field category.
-- **Length** — (Only for certain types) For String types this determines the number of characters that can be stored in
-  the database. For Float and Decimal types, this control becomes **Precision & Scale**.
-- **On Create** — (Only for certain types) For some data types, this option allows you to control what value is saved
-  when an item is created. These values are fallbacks and can be overridden by the App/API. For example, the Timestamp
-  type allows you to "Save Current Date/Time".
-- **On Update** — (Only for certain types) For some data types, this option allows you to control what value is saved
-  when an item is updated. These values are fallbacks and can be overridden by the App/API. For example, the UUID type
-  allows you to "Save Current User ID".
-- **Default Value** — This is the initial value shown for a field when creating an item in the App. If creating an item
-  via the API, this is the fallback value saved to the database if a field value is not submitted.
-- **Allow NULL** — Toggles if the database column is nullable. When disabled, a `NULL` value can not be saved to the
-  field's column.
-- **Unique** — Toggles if the database column's values must all be unique.
+- configure and manage your relational data model and asset storage.
+- configure how data is displayed in the app.
+- configure how data is interacted with by users in the app.
+- translate your entire app and all its data into any language.
 
-::: danger Immutable Keys
+The following sections will further introduce **Settings > Data Model** and also map Directus' data model concepts to
+the classic relational database concepts described in [Relational Data Models](#relational-data-models).
 
-As of now, the key can not be modified after the field has been created.
+## Collections
 
-:::
+<video title="Collections" autoplay muted loop controls>
+	<source src="" type="video/mp4" />
+</video>
 
-::: warning Composite Keys
+A Collection is a data table, and is composed of [Items](#items), which are a group of [Fields](#fields). You can see a
+list of all the Collections, including System Collections, under **Settings > Data Model**. From there, click a
+Collection to open its Configuration Page. To learn more, see our guides on
+[Collections](/configuration/data-model/collections) and
+[System Collections](/configuration/data-model/system-collections).
 
-At this time, Directus does not support composite keys.
+:::warning Composite Keys
 
-:::
-
-### Relationship
-
-This pane is only shown when configuring relational fields (including images and translations). Depending on the type of
-relationship, you'll be presented with one of the following set of options:
-
-- [Many-to-One](/configuration/relationships/#many-to-one-m2o)
-- [One-to-Many](/configuration/relationships/#one-to-many-o2m)
-- [Many-to-Many](/configuration/relationships/#many-to-many-m2m)
-- [Many-to-Any](/configuration/relationships/#many-to-many-m2m)
-- [Translations](/configuration/relationships/#translations-o2m)
-
-::: tip Corresponding Field
-
-[Relationships go both ways](/configuration/relationships/#perspective-matters), so when creating a new relation Field,
-Directus offers to automatically create the corresponding Field on the related Collection.
+Directus does not currently support Composite Keys. If your project uses composite keys, you will need to make an
+adjustment to the data model.
 
 :::
 
-### Field
+:::warning SQL Views
 
-- **Required** — Toggles if a value for the Field is required.
-  - Empty strings (`''`) and `NULL` are **not** accepted as a valid value
-  - `0` and `false` are accepted as a valid value
-  - Default values are accepted as a valid value
-  - Permission Presets are accepted as a valid value
-- **Readonly** — (App Only) Sets the field to be disabled.
-- **Hidden** — (App Only) Hides the field in the App form.
-  - The field is still available in filters and Layout options.
-- **Note** — (App Only) Displayed below the field in the App form, providing a helpful comment for App users. This note
-  supports markdown.
-- **Field Name Translations** — (App Only) While the field key can not be changed (as of now), this option allows
-  translating the field name into different languages. By default, the platform uses the
-  [Title Formatter](/getting-started/glossary/#title-formatter) to display field keys as human readable names, but you
-  can also use translations to explicitly rename more technical column keys.
-
-### Interface
-
-This pane includes any customization options that may be defined by the Interface.
-
-### Display
-
-This pane includes any customization options that may be defined by the Display.
-
-### Conditions
-
-Conditions allow you to alter the current field's setup based on the values of other fields in the form. This allows you
-to show/hide the field, make it readonly, or change the interface options.
-
-Each field can have one or more _rules_. Each rule has the following configuration options:
-
-- **Name**: The name of the rule. This is only used internally for convenience purposes
-- **Rule**: The rule that controls whether or not these conditions are applied. Rule follows the
-  [Filter Rules](/reference/filter-rules) spec
-- **Readonly**: Whether or not the field is readonly when the condition is matched
-- **Hidden**: Whether or not the field is hidden when the condition is matched
-- **Required**: Whether or not the field is required when the condition is matched
-- **Interface Options**: Any additional configuration for the selected interface
-
-These changes to the field are merged onto the base configuration of the field. This means you can have the field hidden
-by default, and then only toggle the hidden state of the field in the condition.
-
-::: tip Order Matters
-
-The conditions are matched in order. The **last** condition that matches is the one that's used to apply the changes.
+Directus does not currently support creation of virtual tables via SQL Views.
 
 :::
 
-## Creating Translated Multilingual Fields
+## Items
 
-While you could create individual fields for each translation, such as `title_english`, `title_german`, `title_french`,
-and so on, this is not easily extensible, and creates a less than ideal form layout. Instead, you can use the Directus
-_relational_ [Translations O2M](/configuration/relationships/#translations-o2m) interface. This uses a separate
-collection to store an endless number of translations, and a separate collection of languages that can easily be added
-to without having to change the schema.
+<video title="Collections" autoplay muted loop controls>
+	<source src="" type="video/mp4" />
+</video>
 
-Let's take a look at a basic example for "Articles":
+Items are rows within the database. We use the term Items because rows frequently represent some real life Item, such as
+a user, blog post, IoT event, bank transaction, etc. You typically view and manage Items across the other app modules,
+such as [Content](/app/content), [User Directory](/app/user-directory), and [File Library](/app/file-library), though
+this is not always true for [System Collections](/configuration/data-model/system-collections).
 
-- **`articles` Collection**
-  - `id` — (Primary Key)
-  - `author` — Field that is not translated
-  - `date_published` — Field that is not translated
-  - `translations` — A O2M relational field to `article_translations`
-- **`article_translations` Collection**
-  - `id` — (Primary Key)
-  - `article` — The key of the article this belongs to
-  - `language` — The language key of this translation
-  - `title` — The translated Article Title
-  - `text` — The translated Article Text
-- **`languages` Collection**
-  - `language_code` — (Primary Key) eg: "en-US"
-  - `name` — The language name, eg: "English"
+## Fields
 
-As you can see above, you add **non-translated** fields, such as the `author` and `publish_date`, to the parent
-collection. Any **multilingual** fields, such as Title or Text, should be added directly to the Translation Collection.
-You can not simply drag or shift fields from the parent to translations, they must be _created_ in the correct
-collection.
+<video title="Fields" autoplay muted loop controls>
+	<source src="" type="video/mp4" />
+</video>
 
-::: tip Translating Parent Fields
+Fields are database columns. You can configure a Collection's Fields under **Settings > Data Model > [Collection] >
+[Field]**, which opens the Field Configuration Drawer, which is composed of the following sections.
 
-To make an existing parent field translatable, you can choose "Duplicate Field" from its context menu, move it to the
-translation collection, and then delete the parent field. However, be aware that this does **not** maintain any existing
-field values in the process.
+- [Schema]() — Controls the technical details of the Field's database column.
+- [Relationship]() — Only shown when configuring relational fields. Configures relationships and relational Triggers.
+- [Field]() —
+- [Interface]() — Customization options that set how users interact with the data.
+- [Display]() — This pane includes any customization options that may be defined by the Display.
+- [Validation]() — Set logic to determine whether an input value is valid and can be stored.
+- [Conditions]() — Alter the current Field's configuration based on the values from other Fields in the Item.
 
-:::
+Consider these Field Configuration sections carefully. An SQL database stores pure, raw data. From there, developers
+will need to build out custom logic and permissions to determine how this data is displayed and interacted with. This is
+true for Directus database as well. The big difference is that the logic Directus uses to display and interact with data
+is configurable, made to be as general purpose as possible. You can display and interact with data however you need, to
+meet any use case.
 
-## Configuring a Field
+## Data Types
 
-1. Navigate to **Settings > Data Model > [Collection Name]**
-2. Click the field you want to update
-3. Make any desired updates referencing the [Creating a Field](/configuration/data-model/#creating-a-field) docs above
+In order to support all flavors of SQL, Directus abstracts away data type differences with a
+[Data Type Superset](/getting-started/glossary/#data-type-superset)
 
-::: tip System Fields
+## Keys and IDs
 
-While all out-of-the-box system fields are locked from editing or deleting, you are able to create new fields within the
-system collections. To get started, expand System Collections from the bottom of **Settings > Data Model**.
+<video title="Keys and IDs" autoplay muted loop controls>
+	<source src="" type="video/mp4" />
+</video>
 
-:::
+When you create a Collection, you must add an ID Field _(Primary Key)_ so the database can keep proper track of the
+Collection's Items and their [relations](#relations) in other Collections, if any exist. Directus supports the following
+types of IDs and you will define your ID every time you
+[create a Collection](/configuration/data-model/collections/#create-a-collection).
 
-## Duplicating a Field
+- **Auto-Incremented Integer**
+- **Auto-Incremented Big Integer** _(MySQL and PostgreSQL only)_
+- **Generated UUID**
+- **Manually Entered String**
 
-1. Navigate to **Settings > Data Model > [Collection Name]**
-2. Click the <span mi icon>more_vert</span> icon for the field you want to duplicate
-3. Click the <span mi icon>content_copy</span> **Duplicate Field** option
+## Relations
 
-::: warning Relational and Primary Key Fields
+<video title="Relations" autoplay muted loop controls>
+	<source src="" type="video/mp4" />
+</video>
 
-It is not currently possible to duplicate relational fields or a collection's primary key.
-
-:::
-
-## Deleting a Field
-
-1. Navigate to **Settings > Data Model > [Collection Name]**
-2. Click the <span mi icon>more_vert</span> icon for the field you want to delete
-3. Click the <span mi icon>delete</span> **Delete Field** option
-4. Confirm this decision by clicking **Delete** in the dialog
-
-::: danger Irreversible Change
-
-This action is permanent and can not be undone. Please proceed with caution.
-
-:::
+Directus supports all relationship types. There is also a special configuration option for translations. To learn more,
+see our guides on [Translations](/configuration/data-model/translations)
