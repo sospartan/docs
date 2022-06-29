@@ -224,6 +224,7 @@ module.exports = {
 								type: 'page',
 								path: '/configuration/data-model/fields',
 								title: 'Fields',
+							},
 							// 	collapsable: true,
 							// 	children: [
 							// 		{
