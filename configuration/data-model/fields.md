@@ -6,13 +6,17 @@
 
 ## Overview
 
-<!-- ### Fields and Layout
-
-<video title="Fields and Layout" autoplay muted loop controls>
+<video title="Fields Overview" autoplay muted loop controls>
 	<source src="" type="video/mp4" />
 </video>
 
-### Field Context Menu
+Fields map to database columns.
+Fields also allow you to custom configure how Values are displayed and interacted with in the App.
+Fields are configured and managed across teh following three areas.
+
+**Fields and Layout** — View and manage a Collection's Fields.
+
+**Field Context Menu** — Contains the following controls:
 
 - <span mi icon>edit</span> **Edit Field** — Opens the Field Configuration Drawer to edit the Field's configuration.
 - **Duplicate Field** — Duplicates the Field along with all of its configuration options.
@@ -22,13 +26,16 @@
   - <span mi icon>border_right</span> Full Width — (Default) The field is shown at the full form width.
   - <span mi icon>aspect_ratio</span> Fill Width — The field is shown filling the page width.
 
-### Group Fields
+**The Field Configuration Drawer** — This menu provides all Field Configurations.
 
-Fields can be organized within different nested groups that are created using the normal Create a Field flow. Different style groupings are available for different use-cases.
-
-### Sort Fields
-
-To sort a Collection's Fields, click <span mi icon>drag_indicator</span> and drag the Field as desired. -->
+- [Schema](/configuration/data-model/fields/schema) — Defines the database column schema for the Field.
+- [Relationship](/configuration/data-model/fields/relationship) — Controls (and only shown when configuring) relational Field details.
+- [Translations](/configuration/data-model/fields/translations) — Controls (and only shown when configuring) relational field details.
+- [Field](/configuration/data-model/fields/field) — Sets details for the Field Input, which is displayed on the [Item Page](/app/content/items/).
+- [Interface](/configuration/data-model/fields/interface) — Configures how you interact with the Field's Values.
+- [Display](/configuration/data-model/fields/display) — Configures how Field Values are displayed in the app.
+- [Validation](/configuration/data-model/fields/validation) —
+- [Conditions](/configuration/data-model/fields/conditions) — Alter the current field's setup based on the values of other fields in the form.
 
 ## Create a Field (Standard)
 
@@ -65,7 +72,7 @@ system collections. To get started, expand System Collections from the bottom of
 
 :::
 
-### Sort Fields
+<!-- ### Configure a Sort Field
 
 The sort feature enables manual drag-and-drop Item reordering within the Directus App. This is typically shown on the
 [Collection Page](/app/content-collections/), but can also be used for sorting items within
@@ -87,7 +94,11 @@ field, the collection's sort settings will automatically be configured for you.
 To configure manual sorting within an Interface (eg: M2M, O2M, or M2A), configure as above, but also set the **Sort
 Field** on the field's Relationship pane.
 
-:::
+::: -->
+
+### Group and Sort Fields
+
+Fields can be organized within different nested groups that are created using the normal Create a Field flow. Different style groupings are available for different use-cases.
 
 ## Duplicate a Field
 

@@ -215,11 +215,11 @@ module.exports = {
 								path: '/configuration/data-model/collections',
 								title: 'Collections',
 							},
-							// {
-							// 	type: 'page',
-							// 	path: '/configuration/data-model/system-collections',
-							// 	title: 'System Collections',
-							// },
+							{
+								type: 'page',
+								path: '/configuration/data-model/system-collections',
+								title: 'System Collections',
+							},
 							{
 								type: 'page',
 								path: '/configuration/data-model/fields',
