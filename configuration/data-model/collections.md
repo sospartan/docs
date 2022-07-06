@@ -244,20 +244,45 @@ filtered out. This gives you the flexibility to manage archived Items however yo
 
 ## Configure a Collection: Sort
 
-<video title="Sort" autoplay muted loop controls>
-	<source src="" type="video/mp4" />
+<video autoplay muted loop controls title="Batch Edit Items">
+	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/manually-sort-items-20220415A.mp4" type="video/mp4" />
 </video>
+
 <!--
 @TODO
 Use the video from /app/content/collection/#manually-sort-items
 -->
 
-When you configure a Sort Field, you have the option to manually
-[sort Items](/app/content/collection/#manually-sort-items) in any position you desire. As shown in the video, Fields
-which cannot serve as Sort Fields will be grayed out and un-selectable in the **Sort Field** dropdown. A Standard Field
-that stores Integer Type data is required.
+The sort feature enables Users to [manually sort Items](/app/content/collection/#manually-sort-items) within the Directus App. This is typically shown on the Collection Page and it can
+also be used for sorting Items within [Junction Tables](/getting-started/glossary/#junction-collections). A Standard Field configured to store `INTEGER` data type is required. As shown in the video, Fields which cannot serve as Sort Fields will be grayed out and un-selectable in the **Sort Field** dropdown. To configure a Sort Field,
+follow these steps.
+
+1. [Create a Field](configuration/data-model/fields/#create-a-field-standard) with an `INTEGER` data type.\
+2. Choose your Sort Field from the dropdown under **Settings > Data Model > [Collection] > Sort**.
+3. Next, you may want to learn how to [manually sort Items](/app/content/collections/#manually-sort-items).
 
 **Sort Field** — Select a Field to custom sort and order Items. Click **Deselect** to disable.
+
+::: tip Automatic Setup
+
+When you [create a Collection](/configuration/data-model/collections/#create-a-collection), you have the option of creating a **Sort** field. If you choose to include this Field, the Collection's sort settings will automatically be configured for you.
+
+:::
+
+::: tip Interface Sorting
+
+To configure manual sorting within a relational Interface (eg: M2M, O2M, or M2A), configure as above, but also set the **Sort Field** on the Field's Relationship pane.
+
+:::
+
+<!--
+@TODO configuration/data-model/fields/field
+:::tip Configure to Hidden
+
+You may want to set this field to be "Hidden" so it doesn't show up within the Item Details Page.
+
+:::
+-->
 
 ## Configure a Collection: Accountability
 

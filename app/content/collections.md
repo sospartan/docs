@@ -57,7 +57,7 @@ and more. To Learn More, see our guide on [Filters](/app/filters/).
 </video>
 
 Drag and drop Items to custom sort them as desired. This is only possible on certain Layouts, such as the default
-[Table Layout](/app/layouts/#table-layout). To sort a Collection's Items, follow the steps below.
+[Table Layout](/app/layouts/#table-layout). To sort a Collection's Items, follow these steps.
 
 1. Be sure a sorting column has been configured under **"Settings > Data Model > Collection"**.\
 _(Shown in the video)_

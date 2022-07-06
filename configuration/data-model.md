@@ -223,7 +223,7 @@ this is not always true for [System Collections](/configuration/data-model/syste
 </video>
 
 Fields are database columns. You can configure a Collection's Fields under **Settings > Data Model > [Collection] >
-[Field]**, which opens the Field Configuration Drawer, which is composed of the following sections.
+[Field]**, which opens the field configuration drawer, which is composed of the following sections.
 
 - [Schema]() — Controls the technical details of the Field's database column.
 - [Relationship]() — Only shown when configuring relational fields. Configures relationships and relational Triggers.
