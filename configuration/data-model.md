@@ -55,6 +55,27 @@ Each row represents one unique _thing_ in your data table. Data tables can also 
 one to one billion, _and beyond!_ In order to sort and find a specific row efficiently, every data table must have a
 Primary Key column. A **Primary Key** is a unique ID for each row. You use it to find the row quickly and efficiently.
 
+ <!--
+ ### Primary Keys
+ Every [Item](/getting-started/glossary/#items) in a relational database has a unique
+[Primary Key](/getting-started/glossary/#primary-key-pk) (or "PK") that identifies it within its
+[Collection](/getting-started/glossary/#collections). Because it's required, the key is the first
+[field](/getting-started/glossary/#fields) created within a collection, typically storing an "auto-increment" number, an
+automatically generated unique hash, or a manually entered value. They are often abbreviated to "PK" (Primary Key), "ID"
+(Identifier), "UID" (Unique Identifier), or "UUID" (Universally Unique Identifier), depending on the type of value they
+store. After it's created, the value of an item's PK should _never_ change.
+
+To link items together relationally, you simply save a reference to an item's PK in a different field. That _reference_
+is called a Foreign Key (FK). If the primary key is a _person_, the foreign key is like their _business card_. It
+references the actual person, providing just enough information to find them.
+
+::: tip Composite & Compound Keys
+
+In the above explanation we've ignored _composite_ and _compound_ keys, which are essentially unique keys created by
+combining _multiple_ field/column values. Currently, Directus does not support composite primary keys.
+
+:::  -->
+
 ### Columns
 
 Tables can also have many columns of data. Every column is labeled with a descriptive name. Here are some examples:
@@ -87,7 +108,7 @@ computer will concatenate them into`22`. Therefore, it is important to set the r
 There are many different data types. Each SQL database flavor _(such as MySQL, SQLite, and Postgres)_ supports slightly
 different data types.
 
-### Data Redundancy
+### Avoid Data Redundancy
 
 Let's consider the `author` column from the blog table in the example above. Right now, there is one column for the
 author, which stores their name. However, we will likely want to store more information about the authors, such as their
@@ -115,13 +136,11 @@ information repeated again and again over trillions of bank transactions, storag
 information out of the database drops on a massive scale... _Not to mention the risk of having conflicting or outdated
 banking information across the database!_
 
-### Relations
+### Why We Use Relational Data Models
 
 To avoid data redundancy, it is always best practice to keep your data model D.R.Y. (which stands for Don't Repeat
 Yourself). This is where _relational_ part of relational data models comes into play. You want to make sure that all
-data is unique. It should be input one time, in one location. The best way to do this is to think of tables, and assign
-them column as if they were distinct objects. So continuing the blog and authors example, your blogs table would only
-contain information about the blog posts and the user details table will only contain information about authors. Then
+data is unique. It should be input one time, in one location. The best way to do this is to think of table rows as if they were distinct items and only assign columns which store information those specific items. To continue the blog and authors example, your blogs table would only contain information about the blog posts. The user details table will only contain information about authors. Then
 you relationally link the two data tables, with their Primary Keys.
 
 ![Blogs and Users Relationally Linked](image.webp)
@@ -141,11 +160,11 @@ There are several ways you can relationally link tables:
 - **Many to Any** — Many Rows in a data table link to many rows across any other data tables.\
   requires a junction data table, like many-to-many relationships, but also requires the a column for the data table name.
 
-### Working With Data
+### Working With Relational Data Models
 
 <!-- Create video or Vue Component demonstrating each of these components. -->
 
-Even for developers with strong data and SQL skills, building out APIs and dashboards to build and manage a data model
+Even for developers with strong data and SQL skills, building out APIs and GUIs to build and manage a data model
 is time consuming. To those who are unfamiliar, the SQL language, classic ORMs, querying/viewing raw data, and
 traditional relational database jargon can be confusing, counterintuitive, and technical. In fact, business users may be
 completely unaccustomed to think about certain things, such as blog posts or geo-positions, in terms of queries and
@@ -155,9 +174,7 @@ colorful, stylized, embedded on a map, etc.
 
 ## Data Models in Directus
 
-All relational data model concepts apply in Directus. However, Directus drops much of the traditional relational
-database jargon to make it easier for business users to think about data. The data model is seen as
-_[Collections](#collections) of [Items](#items), composed of [Fields](#fields)_.
+All relational data model concepts listed above apply in Directus. However, Directus offers a data studio for no-code relational data model configuration. Much of the traditional relational database jargon is replaced with more user-friendly terms, to make things easier for business users. The data model is seen as _[Collections](#collections) of [Items](#items), composed of [Fields](#fields)_.
 
 In order to make data easier to work with, the Directus App lets you customize how data is displayed and interacted
 with. You will be able to provide an intuitive data management experience for even the most non-technical users.
@@ -170,12 +187,12 @@ Data Model configuration takes place across the following pages:
 
 **Settings > Data Model > [Collection] > [Field]**
 
-Across those pages, you have the power to do the follow things, without a line of code or SQL:
+Across those pages, you have the power to do the following things, without a line of code or SQL:
 
-- configure and manage your relational data model and asset storage.
-- configure how data is displayed in the app.
-- configure how data is interacted with by users in the app.
-- translate your entire app and all its data into any language.
+- Configure and manage your relational data model and asset storage.
+- Configure how data is displayed in the data studio.
+- Configure how data is interacted with by users in the data studio.
+- Translate your entire app and all its data into any language.
 
 The following sections will further introduce **Settings > Data Model** and also map Directus' data model concepts to
 the classic relational database concepts described in [Relational Data Models](#relational-data-models).
@@ -233,11 +250,7 @@ Fields are database columns. You can configure a Collection's Fields under **Set
 - [Validation]() — Set logic to determine whether an input value is valid and can be stored.
 - [Conditions]() — Alter the current Field's configuration based on the values from other Fields in the Item.
 
-Consider these Field Configuration sections carefully. An SQL database stores pure, raw data. From there, developers
-will need to build out custom logic and permissions to determine how this data is displayed and interacted with. This is
-true for Directus database as well. The big difference is that the logic Directus uses to display and interact with data
-is configurable, made to be as general purpose as possible. You can display and interact with data however you need, to
-meet any use case.
+Consider these Field Configuration sections carefully. An SQL database columns store pure, raw data. From there, developers build out custom logic and permissions to determine how this data is displayed and interacted with. In Directus, when you configure a field, you configure the database column as well as the logic the Directus data studio uses to display and interact with data.
 
 ## Data Types
 
@@ -260,11 +273,11 @@ types of IDs and you will define your ID every time you
 - **Generated UUID**
 - **Manually Entered String**
 
-## Relations
+## Relationships
 
 <video title="Relations" autoplay muted loop controls>
 	<source src="" type="video/mp4" />
 </video>
 
-Directus supports all relationship types. There is also a special configuration option for translations. To learn more,
-see our guides on [Translations](/configuration/data-model/translations)
+Directus supports all standard relationship types, as well as a few more of its own _compound_ types.To learn more,
+see our guide on [Relationships](/configuration/data-model/relationships)

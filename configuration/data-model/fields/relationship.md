@@ -16,3 +16,14 @@ relationship, you'll be presented with one of the following set of options:
 relation Field, Directus offers to automatically create the corresponding Field on the related Collection.
 
 :::
+
+<!--
+-- M2O
+**Relational Triggers** allow you to control what happens when a relationship is broken. There is one option:
+
+- **On Delete of [Related Collection]** — When the related item (O2M) is deleted...
+  - Nullify the parent M2O field (default)
+  - Set the parent M2O field to its default value
+  - Delete the parent collection's item (cascade)
+  - Prevent the deletion
+  -->
