@@ -241,6 +241,10 @@ While we recognize this is still a draft spec, the SEARCH method has been used e
 and most correct to handle this moving forward. As with everything else, if you have any ideas, opinions, or concerns,
 [we'd love to hear your thoughts](https://github.com/directus/directus/discussions/new).
 
+::: tip Content-Type header
+
+You must set the `Content-Type` header to `application/json` with SEARCH method, otherwise the body will be ignored.
+
 Useful reading:
 
 - [_HTTP SEARCH Method_ (IETF, 2021)](https://datatracker.ietf.org/doc/draft-ietf-httpbis-safe-method-w-body/)
